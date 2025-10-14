@@ -1,0 +1,121 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+.row {
+  display: flex;
+}
+
+.column {
+  flex: 50%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  &.left {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+.album-cover {
+  flex: 100%;
+  margin-bottom: 1rem;
+
+  figcaption {
+    font-weight: bold;
+  }
+}
+
+.album-lists {
+  display: flex;
+
+  button {
+    display: flex;
+    width: auto;
+    margin: 0 0.6rem;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+
+    &.active {
+      img {
+        border-color: #0f52ba;
+      }
+    }
+  }
+  figure {
+    width: auto;
+    margin: 0;
+    padding: 0;
+
+    img {
+      width: 100%;
+      height: auto;
+      border: 3px solid transparent;
+      border-radius: 8px;
+    }
+  }
+  figcaption {
+    font-size: 0.75rem;
+  }
+}
+
+li {
+  text-align: left;
+
+  div {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.play-button {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  background-image: url('data:image/svg+xml,<%3Fxml version="1.0"%3F><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg height="32px" style="enable-background:new 0 0 32 32;" version="1.1" viewBox="0 0 32 32" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Layer_1"/><g id="play_x5F_alt"><path d="M16,0C7.164,0,0,7.164,0,16s7.164,16,16,16s16-7.164,16-16S24.836,0,16,0z M10,24V8l16.008,8L10,24z " style="fill:%230F52BA;"/></g></svg>');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+}
