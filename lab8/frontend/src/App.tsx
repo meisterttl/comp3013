@@ -1,20 +1,21 @@
 import { Header } from "./components/Header";
 import { Assignments } from "./components/Assignments";
-import { useState, useEffect } from "react";
-import { TAssignment } from "./interfaces";
+import { useEffect } from "react";
+import { useStore } from "./store";
 
 function App() {
-  const [assignments, setAssignments] = useState<TAssignment[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const setTasks = useStore((state) => state.setTasks);
+  const setLoadingStatus = useStore((state) => state.setLoadingStatus);
 
   useEffect(() => {
     const fetchTasks = async () => {
-      setIsLoading(true);
+      setLoadingStatus(true);
+
       const res = await fetch("http://localhost:8000/assignments");
       const data = await res.json();
 
-      setAssignments(data);
-      setIsLoading(false);
+      setTasks(data);
+      setLoadingStatus(false);
     };
 
     fetchTasks();
@@ -22,13 +23,8 @@ function App() {
 
   return (
     <>
-      <Header setAssignments={setAssignments} setIsLoading={setIsLoading} />
-      <Assignments
-        assignments={assignments}
-        setAssignments={setAssignments}
-        isLoading={isLoading}
-        setIsLoading={setIsLoading}
-      />
+      <Header />
+      <Assignments />
     </>
   );
 }

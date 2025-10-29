@@ -2,18 +2,17 @@ import styles from "./header.module.css";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { uppercase, trim } from "../../helpers/stringHelpers";
 import { useState } from "react";
-import { TAssignment } from "../../interfaces";
+import { useStore } from "../../store";
+import type { TAssignment } from "../../interfaces";
 
-type Props = {
-  setAssignments: React.Dispatch<React.SetStateAction<TAssignment[]>>;
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-export function Header({ setAssignments, setIsLoading }: Props) {
+export function Header() {
+  const setTasks = useStore((state) => state.setTasks);
+  const setLoadingStatus = useStore((state) => state.setLoadingStatus);
   const [assignment, setAssignment] = useState("");
 
   const handleCreateButton = (e: React.FormEvent) => {
     e.preventDefault();
+
     fetchPostTasks({
       id: crypto.randomUUID(),
       task: assignment,
@@ -23,7 +22,8 @@ export function Header({ setAssignments, setIsLoading }: Props) {
   };
 
   const fetchPostTasks = async (data: TAssignment) => {
-    setIsLoading(true);
+    setLoadingStatus(true);
+
     const res = await fetch("http://localhost:8000/assignments", {
       method: "POST",
       headers: {
@@ -33,8 +33,8 @@ export function Header({ setAssignments, setIsLoading }: Props) {
     });
     const newTasks = await res.json();
 
-    setAssignments(newTasks);
-    setIsLoading(false);
+    setTasks(newTasks);
+    setLoadingStatus(false);
   };
 
   return (

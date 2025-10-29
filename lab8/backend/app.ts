@@ -33,14 +33,15 @@ app.post("/assignments/:id/delete", async (req, res) => {
   await sleep(3000);
   const id = req.params.id;
 
-  let newAssignments = database.assignments;
-
   if (id) {
-    newAssignments = newAssignments.filter((task: Task) => id != task.id);
+    const newAssignments = database.assignments.filter(
+      (task: Task) => id != task.id
+    );
+
     database.assignments.length = 0;
-    database.assignments = newAssignments;
+    database.assignments.push(...newAssignments);
   }
-  res.json(newAssignments);
+  res.json(database.assignments);
 });
 
 app.post("/assignments/:id/toggle", async (req, res) => {
@@ -48,10 +49,8 @@ app.post("/assignments/:id/toggle", async (req, res) => {
   const id = req.params.id;
   const status = req.query.status;
 
-  let newAssignments: Task[] = database.assignments;
-
   if (id && ("true" === status || "false" === status)) {
-    newAssignments = newAssignments.map((task: Task) => {
+    const newAssignments = database.assignments.map((task: Task) => {
       return id == task.id
         ? {
             ...task,
@@ -59,10 +58,11 @@ app.post("/assignments/:id/toggle", async (req, res) => {
           }
         : task;
     });
+
     database.assignments.length = 0;
-    database.assignments = newAssignments; // TODO: Fix this typescript error
+    (database.assignments as Task[]).push(...newAssignments);
   }
-  res.json(newAssignments);
+  res.json(database.assignments);
 });
 
 app.listen(8000, () => {

@@ -1,5 +1,5 @@
+import { useStore } from "../../store";
 import { CSSProperties } from "react";
-import { TAssignment } from "../../interfaces";
 import { Assignment } from "../Assignment";
 import { GridLoader } from "react-spinners";
 import styles from "./assignments.module.css";
@@ -9,19 +9,12 @@ const override: CSSProperties = {
   margin: "12px auto 0",
 };
 
-type Props = {
-  assignments: TAssignment[];
-  setAssignments: React.Dispatch<React.SetStateAction<TAssignment[]>>;
-  isLoading: boolean;
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-};
+export function Assignments() {
+  const assignments = useStore((state) => state.assignments);
+  const setTasks = useStore((state) => state.setTasks);
+  const isLoading = useStore((state) => state.isLoading);
+  const setLoadingStatus = useStore((state) => state.setLoadingStatus);
 
-export function Assignments({
-  assignments,
-  setAssignments,
-  isLoading,
-  setIsLoading,
-}: Props) {
   const handleDeleteButton = async (id: number | string) =>
     fetchModifyTask(`/${id}/delete`);
 
@@ -33,14 +26,14 @@ export function Assignments({
   };
 
   const fetchModifyTask = async (reqParam: string) => {
-    setIsLoading(true);
+    setLoadingStatus(true);
     const res = await fetch(`http://localhost:8000/assignments${reqParam}`, {
       method: "POST",
     });
     const newTasks = await res.json();
 
-    setAssignments(newTasks);
-    setIsLoading(false);
+    setTasks(newTasks);
+    setLoadingStatus(false);
   };
 
   return (
@@ -77,7 +70,7 @@ export function Assignments({
       )}
       <GridLoader
         loading={isLoading}
-        color={"#4ea8de"}
+        color={"#ffffff"}
         cssOverride={override}
       />
     </div>
