@@ -36,7 +36,7 @@ app.post("/assignments/:id/delete", async (req, res) => {
   if (id) {
     const index = database.assignments.findIndex((task: Task) => id == task.id);
 
-    if (-1 !== index) database.assignments.slice(index, 1);
+    if (-1 !== index) database.assignments.splice(index, 1);
   }
   res.json(database.assignments);
 });
