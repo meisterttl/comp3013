@@ -34,12 +34,9 @@ app.post("/assignments/:id/delete", async (req, res) => {
   const id = req.params.id;
 
   if (id) {
-    const newAssignments = database.assignments.filter(
-      (task: Task) => id != task.id
-    );
+    const index = database.assignments.findIndex((task: Task) => id == task.id);
 
-    database.assignments.length = 0;
-    database.assignments.push(...newAssignments);
+    if (-1 !== index) database.assignments.slice(index, 1);
   }
   res.json(database.assignments);
 });
@@ -50,17 +47,9 @@ app.post("/assignments/:id/toggle", async (req, res) => {
   const status = req.query.status;
 
   if (id && ("true" === status || "false" === status)) {
-    const newAssignments = database.assignments.map((task: Task) => {
-      return id == task.id
-        ? {
-            ...task,
-            completed: !task.completed,
-          }
-        : task;
-    });
+    const foundTask = database.assignments.find((task: Task) => id == task.id);
 
-    database.assignments.length = 0;
-    (database.assignments as Task[]).push(...newAssignments);
+    if (foundTask) foundTask.completed = !foundTask.completed;
   }
   res.json(database.assignments);
 });
