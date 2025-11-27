@@ -4,27 +4,19 @@ import { foods } from "./data";
 
 function App() {
   const [dishes, setDishes] = useState(foods);
-  const [processedDishes, setProcessedDishes] = useState([]);
+  const [dishesWithHTML, setDishesWithHTML] = useState([]);
 
   const handleChange = (e) => {
-    setProcessedDishes(dishes);
-
     const needle = e.currentTarget.value;
-    const regex = new RegExp(String.raw`${needle}`, "gi");
+    const regex = new RegExp(String.raw`(${needle})`, "gi");
 
-    const newDishes = dishes.map((dish) => {
-      return {
-        ...dish,
-        name: dish.name.replace(regex, `<mark>${needle}</mark>`),
-        description: dish.description.replace(regex, `<mark>${needle}</mark>`),
-      };
-    });
+    const newDishes = dishes.map((dish) => ({
+      ...dish,
+      name: dish.name.replace(regex, `<mark>$1</mark>`),
+      description: dish.description.replace(regex, `<mark>$1</mark>`),
+    }));
 
-    if ("" === needle) {
-      setProcessedDishes(dishes);
-    } else {
-      setProcessedDishes(newDishes);
-    }
+    setDishesWithHTML(newDishes);
   };
 
   const handleSubmit = (e) => {
@@ -34,23 +26,28 @@ function App() {
     const dish = e.currentTarget.dish.value.trim();
     const description = e.currentTarget.description.value.trim();
 
-    setDishes([
-      ...dishes,
-      {
-        id: id,
-        name: dish,
-        description: description,
-      },
-    ]);
+    if ("" !== dish && "" !== description) {
+      setDishes([
+        ...dishes,
+        {
+          id: id,
+          name: dish,
+          description: description,
+        },
+      ]);
+
+      e.currentTarget.dish.value = null;
+      e.currentTarget.description.value = null;
+    }
   };
 
   useEffect(() => {
-    setProcessedDishes(dishes);
+    setDishesWithHTML(dishes);
   }, [dishes]);
 
   return (
     <>
-      <div className="form-row">
+      <div className="row">
         <div className="column">
           <label htmlFor="search">Search:</label>
           <input type="text" id="search" onChange={handleChange} />
@@ -59,11 +56,11 @@ function App() {
 
       <hr />
 
-      <div className="form-row">
+      <div className="row">
         <div className="column">
           <dl>
-            {processedDishes.map((dish) => (
-              <div key={dish.id} className="column">
+            {dishesWithHTML.map((dish) => (
+              <div key={dish.id} className="dl-row">
                 <dt dangerouslySetInnerHTML={{ __html: dish.name }} />
                 <dd dangerouslySetInnerHTML={{ __html: dish.description }} />
               </div>
@@ -74,22 +71,22 @@ function App() {
 
       <hr />
 
-      <form onSubmit={handleSubmit}>
-        <div className="form-row">
+      <form onSubmit={handleSubmit} className="food-form">
+        <div className="row">
           <div className="column">
-            <label htmlFor="dish">Name:</label>
-            <input type="text" id="dish" />
+            <label htmlFor="dish">Food Name:</label>
+            <input type="text" id="dish" required />
           </div>
         </div>
 
-        <div className="form-row">
+        <div className="row">
           <div className="column">
             <label htmlFor="description">Description:</label>
-            <input type="text" id="description" />
+            <input type="text" id="description" required />
           </div>
         </div>
 
-        <div className="form-row">
+        <div className="row">
           <div className="column">
             <button type="submit">Add Food</button>
           </div>
