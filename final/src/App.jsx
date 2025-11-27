@@ -16,7 +16,11 @@ function App() {
       description: dish.description.replace(regex, `<mark>$1</mark>`),
     }));
 
-    setDishesWithHTML(newDishes);
+    if ("" === needle) {
+      setDishesWithHTML(dishes);
+    } else {
+      setDishesWithHTML(newDishes);
+    }
   };
 
   const handleSubmit = (e) => {
